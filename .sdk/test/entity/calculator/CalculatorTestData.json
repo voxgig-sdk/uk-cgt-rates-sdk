@@ -1,0 +1,53 @@
+{
+  "existing": {
+    "calculator": {
+      "CALCULATOR00": {
+        "badr": "s32",
+        "badrUsed": 51,
+        "basecost": 52,
+        "fees": 53,
+        "price": 54,
+        "id": "CALCULATOR00"
+      },
+      "CALCULATOR01": {
+        "badr": "s64",
+        "badrUsed": 101,
+        "basecost": 102,
+        "fees": 103,
+        "price": 104,
+        "id": "CALCULATOR01"
+      },
+      "CALCULATOR02": {
+        "badr": "s96",
+        "badrUsed": 151,
+        "basecost": 152,
+        "fees": 153,
+        "price": 154,
+        "id": "CALCULATOR02"
+      }
+    }
+  },
+  "new": {
+    "calculator": {
+      "calculator_ref01": {
+        "badr": "sc8",
+        "badrUsed": 201,
+        "basecost": 202,
+        "fees": 203,
+        "price": 204
+      }
+    }
+  },
+  "requests": {
+    "POST /mcp/tools/calculate": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    },
+    "POST /mcp/tools/calculator_describe": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

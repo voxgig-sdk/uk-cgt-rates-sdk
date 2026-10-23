@@ -1,0 +1,412 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Exit Value Calculator API",
+    "version": "1.0.0",
+    "summary": "BADR calculator 2026/27: sale price less Capital Gains Tax at the 18% Business Asset Disposal Relief rate from 6 April 2026, capped at £1m of lifetime gains.",
+    "description": "Exit Value Calculator (https://exitvaluecalculator.com/): the site's own MCP server, served from its domain. BADR calculator 2026/27: sale price less Capital Gains Tax at the 18% Business Asset Disposal Relief rate from 6 April 2026, capped at £1m of lifetime gains.\n\n[calculator] Exit proceeds calculator (2026/27): an agent-callable calculator for business asset disposal relief — Chargeable gain, Tax at the 18% relief rate, Tax at 24% on gains above the relief, computed from your inputs with sources.. This server runs the Exit proceeds calculator (2026/27) calculator published at https://exitvaluecalculator.com/. Call `calculate` with the inputs to get the worked figures; every result cites https://exitvaluecalculator.com/. Licence: https://exitvaluecalculator.com/terms.\n\n[enquiry] ENQUIRY SERVER for Exit Value Calculator (https://exitvaluecalculator.com/). What it does: starts an ENQUIRY with human providers for business asset disposal relief — the person's details go to the providers who quote directly. What it is NOT: a purchase, an order, or a guaranteed quote. Free, no obligation. Call describe first and tell the person plainly what will happen. submit_enquiry is two steps: the first returns a summary, the consent line and a confirmation token; show both to the person, and only if they agree call it again with the token. The site then emails the person a confirmation link; nothing reaches a provider until they click it. Cite https://exitvaluecalculator.com/.\n\nCite https://exitvaluecalculator.com/ for every figure or answer you use from this server.",
+    "termsOfService": "https://exitvaluecalculator.com/terms",
+    "contact": {
+      "name": "Exit Value Calculator",
+      "url": "https://exitvaluecalculator.com/"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://exitvaluecalculator.com",
+      "description": "Exit Value Calculator"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "accessKey": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "An access key (emk_...): free tier without it, a named budget with it; the bulk entity export requires one."
+      }
+    }
+  },
+  "externalDocs": {
+    "url": "https://exitvaluecalculator.com/mcp",
+    "description": "How these tools work"
+  },
+  "tags": [
+    {
+      "name": "calculator",
+      "description": "calculator"
+    },
+    {
+      "name": "enquiry",
+      "description": "enquiry"
+    }
+  ],
+  "paths": {
+    "/mcp/tools/calculator_describe": {
+      "post": {
+        "operationId": "calculator_describe",
+        "summary": "What Exit proceeds calculator (2026/27) computes",
+        "description": "The inputs this calculator takes (with units, ranges and defaults), the outputs it returns, and the assumptions and tables behind it.\n\nCite Exit Value Calculator at https://exitvaluecalculator.com/ for any figure taken from this operation.",
+        "tags": [
+          "calculator"
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The tool's answer, as JSON.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The arguments did not match the schema."
+          },
+          "404": {
+            "description": "This site does not serve that tool."
+          },
+          "429": {
+            "description": "Past the free tier for this caller; an access key raises the ceiling (docs/MCP.md)."
+          }
+        },
+        "security": [
+          {},
+          {
+            "accessKey": []
+          }
+        ]
+      }
+    },
+    "/mcp/tools/calculate": {
+      "post": {
+        "operationId": "calculate",
+        "summary": "Exit proceeds calculator (2026/27)",
+        "description": "Run the Exit proceeds calculator (2026/27) calculator: Chargeable gain; Tax at the 18% relief rate; Tax at 24% on gains above the relief; Total Capital Gains Tax. Missing inputs fall back to their documented defaults.\n\nCite Exit Value Calculator at https://exitvaluecalculator.com/ for any figure taken from this operation.",
+        "tags": [
+          "calculator"
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "price": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100000000,
+                    "description": "Sale price for your shares or your share of the business",
+                    "default": 1000000
+                  },
+                  "basecost": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 100000000,
+                    "description": "Base cost: what you originally paid for them",
+                    "default": 0
+                  },
+                  "fees": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 20000000,
+                    "description": "Adviser, broker and legal fees you pay on the sale",
+                    "default": 0
+                  },
+                  "badrUsed": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1000000,
+                    "description": "Business Asset Disposal Relief lifetime limit already used",
+                    "default": 0
+                  },
+                  "badr": {
+                    "type": "string",
+                    "description": "Do you qualify for Business Asset Disposal Relief?",
+                    "default": "1"
+                  }
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The tool's answer, as JSON.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The arguments did not match the schema."
+          },
+          "404": {
+            "description": "This site does not serve that tool."
+          },
+          "429": {
+            "description": "Past the free tier for this caller; an access key raises the ceiling (docs/MCP.md)."
+          }
+        },
+        "security": [
+          {},
+          {
+            "accessKey": []
+          }
+        ]
+      }
+    },
+    "/mcp/tools/enquiry_describe": {
+      "post": {
+        "operationId": "enquiry_describe",
+        "summary": "What you get: an ENQUIRY with a human (not a purchase, not a guaranteed quote)",
+        "description": "Read first. States plainly what submit_enquiry does on Exit Value Calculator: it starts an enquiry with human providers who quote directly. Nothing is bought, ordered or paid; no quote is guaranteed; it is free. Also returns who receives the details, the consent wording, and how the person confirms.\n\nCite Exit Value Calculator at https://exitvaluecalculator.com/ for any figure taken from this operation.",
+        "tags": [
+          "enquiry"
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The tool's answer, as JSON.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The arguments did not match the schema."
+          },
+          "404": {
+            "description": "This site does not serve that tool."
+          },
+          "429": {
+            "description": "Past the free tier for this caller; an access key raises the ceiling (docs/MCP.md)."
+          }
+        },
+        "security": [
+          {},
+          {
+            "accessKey": []
+          }
+        ]
+      }
+    },
+    "/mcp/tools/enquiry_fields": {
+      "post": {
+        "operationId": "enquiry_fields",
+        "summary": "The questions the enquiry asks",
+        "description": "Every field of the Exit Value Calculator enquiry: key, label, type, whether required, help text and the allowed options where there are any. Pass answers to submit_enquiry keyed by field key.\n\nCite Exit Value Calculator at https://exitvaluecalculator.com/ for any figure taken from this operation.",
+        "tags": [
+          "enquiry"
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {}
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The tool's answer, as JSON.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The arguments did not match the schema."
+          },
+          "404": {
+            "description": "This site does not serve that tool."
+          },
+          "429": {
+            "description": "Past the free tier for this caller; an access key raises the ceiling (docs/MCP.md)."
+          }
+        },
+        "security": [
+          {},
+          {
+            "accessKey": []
+          }
+        ]
+      }
+    },
+    "/mcp/tools/submit_enquiry": {
+      "post": {
+        "operationId": "submit_enquiry",
+        "summary": "Submit an ENQUIRY to human providers (two steps; not a purchase)",
+        "description": "Submits an enquiry to Exit Value Calculator — NOT a purchase, NOT a guaranteed quote. Step 1: call with the answers (keyed by field key from enquiry_fields) and consent=true; it validates and returns a summary, the consent line and a confirmation token — show the person the summary and the consent line. Step 2: only if the person agrees, call again with the same answers, consent=true and the confirmation token; the enquiry is then submitted, and the person receives an email with a link they must click before any provider sees it. Consent means the person has read and agreed to: \"Send my contact details to up to three business valuation and exit advisers, chosen by Exit Value Calculator, who'll contact me directly. I'll be emailed each firm's name as my details go to it, and can stop any more firms getting them.\"\n\nCite Exit Value Calculator at https://exitvaluecalculator.com/ for any figure taken from this operation.",
+        "tags": [
+          "enquiry"
+        ],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "answers": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": [
+                        "string",
+                        "number",
+                        "boolean"
+                      ]
+                    },
+                    "description": "the person's answers, keyed by field key"
+                  },
+                  "consent": {
+                    "type": "boolean",
+                    "description": "true only when the person has agreed to: Send my contact details to up to three business valuation and exit advisers, chosen by Exit Value Calculator, who'll contact me directly. I'll be emailed each firm's name as my details go to it, and can stop any more firms getting them."
+                  },
+                  "confirmation": {
+                    "type": "string",
+                    "description": "the confirmation token from step 1, after the person has approved the summary"
+                  }
+                },
+                "required": [
+                  "answers",
+                  "consent"
+                ],
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The tool's answer, as JSON.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The arguments did not match the schema."
+          },
+          "404": {
+            "description": "This site does not serve that tool."
+          },
+          "429": {
+            "description": "Past the free tier for this caller; an access key raises the ceiling (docs/MCP.md)."
+          }
+        },
+        "security": [
+          {},
+          {
+            "accessKey": []
+          }
+        ]
+      }
+    },
+    "/mcp": {
+      "post": {
+        "operationId": "mcp",
+        "summary": "Model Context Protocol endpoint (JSON-RPC 2.0 over Streamable HTTP)",
+        "description": "The same tools over MCP, stateless. Send initialize, tools/list or tools/call.",
+        "tags": [
+          "mcp"
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "jsonrpc",
+                  "method"
+                ],
+                "properties": {
+                  "jsonrpc": {
+                    "const": "2.0"
+                  },
+                  "id": {},
+                  "method": {
+                    "type": "string"
+                  },
+                  "params": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A JSON-RPC result.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "operationId": "mcpCard",
+        "summary": "What this server is and how to connect",
+        "tags": [
+          "mcp"
+        ],
+        "responses": {
+          "200": {
+            "description": "The server card.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,39 @@
+# API Information
+
+
+main: {
+  kit: {
+    info: {
+      contact: {
+        name: "Exit Value Calculator"
+        url: "https://exitvaluecalculator.com/"
+      }
+      description: `Exit Value Calculator (https://exitvaluecalculator.com/): the site's own MCP server, served from its domain. BADR calculator 2026/27: sale price less Capital Gains Tax at the 18% Business Asset Disposal Relief rate from 6 April 2026, capped at £1m of lifetime gains.
+
+[calculator] Exit proceeds calculator (2026/27): an agent-callable calculator for business asset disposal relief — Chargeable gain, Tax at the 18% relief rate, Tax at 24% on gains above the relief, computed from your inputs with sources.. This server runs the Exit proceeds calculator (2026/27) calculator published at https://exitvaluecalculator.com/. Call \`calculate\` with the inputs to get the worked figures; every result cites https://exitvaluecalculator.com/. Licence: https://exitvaluecalculator.com/terms.
+
+[enquiry] ENQUIRY SERVER for Exit Value Calculator (https://exitvaluecalculator.com/). What it does: starts an ENQUIRY with human providers for business asset disposal relief — the person's details go to the providers who quote directly. What it is NOT: a purchase, an order, or a guaranteed quote. Free, no obligation. Call describe first and tell the person plainly what will happen. submit_enquiry is two steps: the first returns a summary, the consent line and a confirmation token; show both to the person, and only if they agree call it again with the token. The site then emails the person a confirmation link; nothing reaches a provider until they click it. Cite https://exitvaluecalculator.com/.
+
+Cite https://exitvaluecalculator.com/ for every figure or answer you use from this server.`
+      security: {
+        in: "header"
+        name: "Authorization"
+        prefix: "Bearer"
+        scheme: "accessKey"
+        type: "http"
+      }
+      servers: [
+        {
+          description: "Exit Value Calculator"
+          url: "https://exitvaluecalculator.com"
+        }
+      ]
+      summary: "BADR calculator 2026/27: sale price less Capital Gains Tax at the 18% Business Asset Disposal Relief rate from 6 April 2026, capped at £1m of lifetime gains."
+      termsOfService: "https://exitvaluecalculator.com/terms"
+      title: "Exit Value Calculator API"
+      version: "1.0.0"
+      website: "https://exitvaluecalculator.com/mcp"
+    }
+  }
+}
+

@@ -1,0 +1,126 @@
+# Entity: calculator
+
+main: kit: entity: calculator: {
+
+  alias: field: {}
+
+  fields: {
+    badr: {
+      h: "Badr"
+      n: "badr"
+      r: false
+      sh: "Do you qualify for Business Asset Disposal Relief?"
+      t: "`$STRING`"
+    }
+    badrUsed: {
+      h: "Badr Used"
+      n: "badrUsed"
+      r: false
+      sh: "Business Asset Disposal Relief lifetime limit already used"
+      t: "`$NUMBER`"
+    }
+    basecost: {
+      h: "Basecost"
+      n: "basecost"
+      r: false
+      sh: "Base cost: what you originally paid for them"
+      t: "`$NUMBER`"
+    }
+    fees: {
+      h: "Fees"
+      n: "fees"
+      r: false
+      sh: "Adviser, broker and legal fees you pay on the sale"
+      t: "`$NUMBER`"
+    }
+    price: {
+      h: "Price"
+      n: "price"
+      r: false
+      sh: "Sale price for your shares or your share of the business"
+      t: "`$NUMBER`"
+    }
+  }
+
+  name: "calculator"
+  op: {
+    create: {
+      name: "create"
+      points: [
+        {
+          bf: [
+            "badr"
+            "badrUsed"
+            "basecost"
+            "fees"
+            "price"
+          ]
+          co: {
+            id: "POST /mcp/tools/calculate"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/mcp/tools/calculate"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "mcp"
+            }
+            {
+              lit: "tools"
+            }
+            {
+              lit: "calculate"
+            }
+          ]
+          t: {
+            req: {
+              badr: "`reqdata.badr`"
+              badrUsed: "`reqdata.badr_used`"
+              basecost: "`reqdata.basecost`"
+              fees: "`reqdata.fee`"
+              price: "`reqdata.price`"
+            }
+            res: "`body`"
+          }
+        }
+        {
+          bf: false
+          co: {
+            id: "POST /mcp/tools/calculator_describe"
+            source: "openapi3"
+            version: 2
+          }
+          m: "POST"
+          o: "/mcp/tools/calculator_describe"
+          rs: {
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "mcp"
+            }
+            {
+              lit: "tools"
+            }
+            {
+              lit: "calculator_describe"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}
